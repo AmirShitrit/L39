@@ -1,3 +1,5 @@
+import tensorflow as tf
+
 from config import DATA_DIR
 from data import apply_preprocessing, download_data_if_needed, load_datasets, print_dataset_info
 from model import build_model, compile_model, train_model
@@ -9,6 +11,8 @@ from visualization import (
 )
 
 if __name__ == "__main__":
+    tf.random.set_seed(42)
+
     download_data_if_needed(DATA_DIR)
     train_dataset, val_dataset = load_datasets(DATA_DIR)
     print_dataset_info(train_dataset, val_dataset)

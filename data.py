@@ -35,6 +35,7 @@ def load_datasets(data_dir: Path) -> tuple[tf.data.Dataset, tf.data.Dataset]:
         image_size=(IMG_SIZE, IMG_SIZE),
         batch_size=BATCH_SIZE,
         shuffle=True,
+        seed=42,
     )
     val_dataset = tf.keras.utils.image_dataset_from_directory(
         data_dir / "val",
@@ -46,7 +47,11 @@ def load_datasets(data_dir: Path) -> tuple[tf.data.Dataset, tf.data.Dataset]:
 
 
 def apply_preprocessing(dataset: tf.data.Dataset) -> tf.data.Dataset:
-    return dataset.map(_normalize, num_parallel_calls=tf.data.AUTOTUNE)
+    return (
+        dataset
+        .map(_normalize, num_parallel_calls=tf.data.AUTOTUNE)
+        .prefetch(tf.data.AUTOTUNE)
+    )
 
 
 def print_dataset_info(
